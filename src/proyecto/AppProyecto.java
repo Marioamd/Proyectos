@@ -2,7 +2,7 @@
 package proyecto;
 
 import clases.ConexionMySQL;
-import clases.Proyectos;
+import clases.Proyecto;
 
 import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
@@ -517,9 +517,244 @@ public class AppProyecto extends JFrame implements ActionListener {
         }
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            if (e.getSource() == btn_cerrar) {
+        dispose();
+        return;
+    }
+
+    if (e.getSource() == btn_nuevo) {
+        LimpiarDatos();
+    } else {
+        
+        if (e.getSource() != btn_borrar) {
+            if (txt_codproy.getText().trim().equals("")) {
+                JOptionPane.showMessageDialog(null, "Ingrese código de proyecto.");
+                txt_codproy.requestFocus();
+                return;
+            }
+            if (txt_proy.getText().trim().equals("")) {
+                JOptionPane.showMessageDialog(null, "Ingrese nombre del proyecto.");
+                txt_proy.requestFocus();
+                return;
+            }
+            if (txt_desc.getText().trim().equals("")) {
+                JOptionPane.showMessageDialog(null, "Ingrese descripción del proyecto.");
+                txt_desc.requestFocus();
+                return;
+            }
+
+            if (dc_fini.getDate() == null) {
+                JOptionPane.showMessageDialog(null, "Seleccione la fecha de inicio del proyecto.");
+                dc_fini.requestFocus();
+                return;
+            }
+
+            Date fechaInicio = dc_fini.getDate();
+            Date fechaActual = new Date();
+
+            if (fechaInicio.after(fechaActual)) {
+                JOptionPane.showMessageDialog(null, "La fecha de inicio no puede ser posterior a la fecha actual.");
+                dc_fini.requestFocus();
+                return;
+            }
+
+            if (dc_ffin.getDate() == null) {
+                JOptionPane.showMessageDialog(null, "Seleccione la fecha de cierre del proyecto.");
+                dc_ffin.requestFocus();
+                return;
+            }
+
+            Date fechaFin = dc_ffin.getDate();
+
+            if (fechaFin.before(fechaInicio)) {
+                JOptionPane.showMessageDialog(null, "La fecha de cierre no puede ser anterior a la fecha de inicio.");
+                dc_ffin.requestFocus();
+                return;
+            }
+
+            
+            if (cbo_tipo.getSelectedIndex() == 0) {
+                JOptionPane.showMessageDialog(null, "Seleccione un tipo de proyecto.");
+                return;
+            }
+	    if (cbo_estado.getSelectedIndex() == 0) {
+                JOptionPane.showMessageDialog(null, "Seleccione un estado para el proyecto.");
+                return;
+            }
+	    if (cbo_usuario.getSelectedIndex() == 0) {
+                JOptionPane.showMessageDialog(null, "Seleccione un responsable de proyecto.");
+                return;
+            }
+
+        }
+
+        Proyecto proyecto = new Proyecto();
+        proyecto.setCodigo_proyecto(txt_codproy.getText());
+        proyecto.setProyecto(txt_proy.getText());
+        proyecto.setDescripcion(txt_desc.getText());
+
+        
+        Date fini_1 = dc_fini.getDate();
+        long fini_2 = fini_1.getTime();
+        java.sql.Date fini_3 = new java.sql.Date(fini_2);
+
+        proyecto.setFecha_inicio(fini_3);
+
+        Date ffin_1 = dc_ffin.getDate();
+        long ffin_2 = ffin_1.getTime();
+        java.sql.Date ffin_3 = new java.sql.Date(ffin_2);
+
+        proyecto.setFecha_fin(ffin_3);
+
+
+        String ct = "", nt = cbo_tipo.getSelectedItem().toString();
+
+        for (String[] tipo: arr_tipo) {
+            if (nt.equals(tipo[1])) {
+                ct = tipo[0];
+                break;
+            }
+        }
+
+        proyecto.setProyecto_codigo_tipo(ct);
+
+
+        String ce = "", ne = cbo_estado.getSelectedItem().toString();
+
+        for (String[] estado: arr_estado) {
+            if (ne.equals(estado[1])) {
+                ce = estado[0];
+                break;
+            }
+        }
+
+        proyecto.setProyecto_codigo_estado(ce);
+
+
+        String cu = "", nu = cbo_usuario.getSelectedItem().toString();
+
+        for (String[] usuario: arr_usuario) {
+            if (nu.equals(usuario[1])) {
+                cu = usuario[0];
+                break;
+            }
+        }
+
+        proyecto.setProyecto_codigo_responsable(cu);
+
+        Connection cnx = null;
+        java.sql.PreparedStatement pstm = null;
+
+        try {
+            cnx = cn.Conectar();
+            String cad_sql;
+
+            if (e.getSource() == btn_agregar) {
+                cad_sql = "call sp_registrar_proyecto(?,?,?,?,?,?,?,?);";
+                pstm = cnx.prepareStatement(cad_sql);
+                pstm.setString(1, proyecto.getCodigo_proyecto());
+                pstm.setString(2, proyecto.getProyecto());
+                pstm.setString(3, proyecto.getDescripcion());
+                pstm.setDate(4, (java.sql.Date) proyecto.getFecha_inicio());
+                pstm.setDate(5, (java.sql.Date) proyecto.getFecha_fin());
+                pstm.setString(6, proyecto.getProyecto_codigo_tipo());
+                pstm.setString(7, proyecto.getProyecto_codigo_estado());
+                pstm.setString(8, proyecto.getProyecto_codigo_responsable());
+                pstm.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Proyecto registrado con éxito.");
+
+            } else if (e.getSource() == btn_editar) {
+                cad_sql = "call sp_editar_proyecto(?,?,?,?,?,?,?,?);";
+                pstm = cnx.prepareStatement(cad_sql);
+                pstm.setString(1, proyecto.getCodigo_proyecto());
+                pstm.setString(2, proyecto.getProyecto());
+                pstm.setString(3, proyecto.getDescripcion());
+                pstm.setDate(4, (java.sql.Date) proyecto.getFecha_inicio());
+                pstm.setDate(5, (java.sql.Date) proyecto.getFecha_fin());
+                pstm.setString(6, proyecto.getProyecto_codigo_tipo());
+                pstm.setString(7, proyecto.getProyecto_codigo_estado());
+                pstm.setString(8, proyecto.getProyecto_codigo_responsable());
+                pstm.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Proyecto actualizado con éxito.");
+
+
+            } else if (e.getSource() == btn_borrar) {
+                int opc = JOptionPane.showConfirmDialog(null,
+                        "¿Seguro de borrar el registro?",
+                        "TGH TECHNOLOGY SOLUTION", JOptionPane.YES_NO_OPTION);
+                if (opc == JOptionPane.YES_OPTION) {
+                    cad_sql = "call sp_borrar_proyecto(?);";
+                    pstm = cnx.prepareStatement(cad_sql);
+                    pstm.setString(1, proyecto.getCodigo_proyecto());
+                    pstm.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "Proyecto eliminado.");
+                }
+
+            }else if (e.getSource() == btn_filtrar){
+                cad_sql =  "call sp_filtrar_proyecto(?);";
+                pstm = cnx.prepareStatement(cad_sql);
+                pstm.setString(1, proyecto.getProyecto());
+            }
+
+            MostrarDatos();
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        } finally {
+            try {
+                if (pstm != null) pstm.close();
+                if (cnx != null) cnx.close();
+            } catch (SQLException e2) {
+                e2.printStackTrace();
+            }
+        }
+
+        LimpiarDatos();
+    }
+}
+
+    private void LimpiarDatos() {
+    txt_codproy.setEditable(true);
+
+    tb_proyectos.clearSelection();
+
+    txt_codproy.setText("");
+    txt_proy.setText("");
+    txt_desc.setText("");
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+    Date fechaInicio;
+    try {
+        fechaInicio = sdf.parse("2000-01-01");
+        dc_fini.setDate(fechaInicio);
+    } catch (ParseException ex) {
+        Logger.getLogger(AppProyecto.class.getName()).log(Level.SEVERE, "Error de fecha de inicio", ex);
+    }
+
+    Date fechaFin;
+    try {
+        fechaFin = sdf.parse("2000-12-31");
+        dc_ffin.setDate(fechaFin);
+    } catch (ParseException ex) {
+        Logger.getLogger(AppProyecto.class.getName()).log(Level.SEVERE, "Error de fecha de fin", ex);
+    }
+
+    if (!arr_tipo.isEmpty()) {
+        cbo_tipo.setSelectedIndex(0);
+    }
+
+    if (!arr_estado.isEmpty()) {
+        cbo_estado.setSelectedIndex(0);
+    }
+
+    if (!arr_usuario.isEmpty()) {
+        cbo_usuario.setSelectedIndex(0);
+    }
+
+
+    txt_codproy.requestFocus();
+
     }
 }

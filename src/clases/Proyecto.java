@@ -2,7 +2,7 @@ package clases;
 
 import java.sql.Date;
 
-public class Proyectos {
+public class Proyecto {
     private String codigo_proyecto;
     private String proyecto;
     private String descripcion;
@@ -12,11 +12,11 @@ public class Proyectos {
     private String proyecto_codigo_estado;
     private String proyecto_codigo_responsable;
     
-    public Proyectos (){
+    public Proyecto (){
         
     }
     
-    public Proyectos(String codigo_proyecto, String proyecto, String descripcion,
+    public Proyecto(String codigo_proyecto, String proyecto, String descripcion,
             Date fecha_inicio, Date fecha_fin, String proyecto_codigo_tipo, 
             String proyecto_codigo_estado, String proyecto_codigo_responsable){
         this.codigo_proyecto = codigo_proyecto;
