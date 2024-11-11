@@ -676,6 +676,7 @@ public class AppProyecto extends JFrame implements ActionListener {
 
             if (e.getSource() == btn_agregar) {
                 cad_sql = "call sp_registrar_proyecto(?,?,?,?,?,?,?,?);";
+                 //cad_sql = "{call sp_registrar_proyecto(?,?,?,?,?,?,?,?)}"; // SQL
                 pstm = cnx.prepareStatement(cad_sql);
                 pstm.setString(1, proyecto.getCodigo_proyecto());
                 pstm.setString(2, proyecto.getProyecto());
@@ -780,4 +781,76 @@ public class AppProyecto extends JFrame implements ActionListener {
     txt_codproy.requestFocus();
 
     }
+    
+    private void Filtrar(String proyecto) {
+    DefaultTableModel modelo = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return false;
+        }
+    };
+
+    modelo.setRowCount(0);
+
+    Connection cnx = null;
+    java.sql.PreparedStatement pstm = null;
+    ResultSet rs = null;
+
+    try {
+        cnx = cn.Conectar();
+        
+        String cad_sql = "call sp_filtrar_proyecto(?)";
+        //String cad_sql = "{call sp_filtrar_proyecto(?)}"; // Para SQL server
+        
+        pstm = cnx.prepareStatement(cad_sql);
+        pstm.setString(1, proyecto + "%");  
+
+        rs = pstm.executeQuery();
+
+        int nc = rs.getMetaData().getColumnCount();
+        for (int i = 1; i <= nc; i++) {
+            modelo.addColumn(rs.getMetaData().getColumnName(i));
+        }
+
+        while (rs.next()) {
+            Object[] arr_filas = new Object[nc];
+
+            for (int i = 0; i < nc; i++) {
+                arr_filas[i] = rs.getObject(i + 1);
+            }
+
+            modelo.addRow(arr_filas);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error al filtrar los datos.");
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (pstm != null) pstm.close();
+            if (cnx != null) cnx.close();
+        } catch (SQLException e2) {
+            e2.printStackTrace();
+        }
+    }
+
+    tb_proyectos.setModel(modelo);
+    tb_proyectos.setRowHeight(22);
+
+    DefaultTableCellRenderer alinearCentro = new DefaultTableCellRenderer();
+    alinearCentro.setHorizontalAlignment(SwingConstants.CENTER);
+
+    TableColumnModel arr_col = tb_proyectos.getColumnModel();
+    arr_col.getColumn(0).setPreferredWidth(50);
+    arr_col.getColumn(0).setCellRenderer(alinearCentro);
+
+    arr_col.getColumn(1).setPreferredWidth(120);
+}
+    
+    public static void main(String[] args) {
+        AppProyecto frm = new AppProyecto();
+        frm.setVisible(true);
+    }        
+
 }
