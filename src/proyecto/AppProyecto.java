@@ -62,7 +62,7 @@ public class AppProyecto extends JFrame implements ActionListener {
 
         IniciarFormulario();
         IniciarControles();
-        //LimpiarDatos();
+        LimpiarDatos();
         MostrarDatos();
     }
 
@@ -153,7 +153,7 @@ public class AppProyecto extends JFrame implements ActionListener {
         cbo_usuario = new JComboBox();
         cbo_usuario.setBounds(280, 200, 110, 25);
 
-        arr_tipo = this.ObtenerUsuario();
+        arr_usuario = this.ObtenerUsuario();
         
         for (String[] usuario: arr_usuario) {
             cbo_usuario.addItem(usuario[1]);
