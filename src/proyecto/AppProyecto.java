@@ -50,7 +50,7 @@ public class AppProyecto extends JFrame implements ActionListener {
 
     private JComboBox cbo_tipo, cbo_estado, cbo_usuario;
 
-    private JButton btn_nuevo, btn_agregar, btn_editar, btn_borrar, btn_cerrar, btn_filtrar;
+    private JButton btn_nuevo, btn_agregar, btn_editar, btn_borrar, btn_cerrar, btn_filtrar, btn_mostrar_registro;
 
     private JTable tb_proyectos;
     private JScrollPane scr_proyectos;
@@ -161,6 +161,11 @@ public class AppProyecto extends JFrame implements ActionListener {
             cbo_usuario.addItem(usuario[1]);
         }
 
+        lbl_filtro = new JLabel("Buscar:");
+        lbl_filtro.setBounds(20, 450, 60, 25);
+        
+        txt_filtro = new JTextField();
+        txt_filtro.setBounds(80, 450, 200, 25);
 
         btn_nuevo = new JButton();
         btn_nuevo.setText("Nuevo");
@@ -182,16 +187,6 @@ public class AppProyecto extends JFrame implements ActionListener {
         btn_borrar.setBounds(310, 240, 90, 25);
         btn_borrar.addActionListener(this);
 
-        lbl_filtro = new JLabel("Buscar:");
-        lbl_filtro.setBounds(20, 450, 60, 25);
-        
-        txt_filtro = new JTextField();
-        txt_filtro.setBounds(80, 450, 200, 25);
-
-        btn_filtrar = new JButton("Filtrar");
-        btn_filtrar.setBounds(290, 450, 80, 24);
-        btn_filtrar.addActionListener(this);
-        
         btn_cerrar = new JButton();
         btn_cerrar.setText("Cerrar");
         btn_cerrar.setFont(new Font("Consolas", Font.BOLD, 14));
@@ -201,6 +196,32 @@ public class AppProyecto extends JFrame implements ActionListener {
         btn_cerrar.addActionListener(this);
         
 
+        btn_filtrar = new JButton("Filtrar");
+        btn_filtrar.setBounds(290, 450, 80, 24);
+        btn_filtrar.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String proyecto = txt_filtro.getText().trim();
+            if (!proyecto.isEmpty()) {
+                Filtrar(proyecto);
+            } else {
+                JOptionPane.showMessageDialog(null, "Debe ingresar un valor para filtrar.");
+            }
+        }
+        });
+        
+        btn_mostrar_registro = new JButton("Limpiar");
+        btn_mostrar_registro.setBounds(140, 340, 130, 25); 
+        btn_mostrar_registro.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MostrarDatos(); // Recargar todos los datos
+            }
+        });
+        this.add(btn_mostrar_registro);
+
+        
+        
         tb_proyectos = new JTable();
 
         tb_proyectos.setRowHeight(20);
@@ -231,17 +252,17 @@ public class AppProyecto extends JFrame implements ActionListener {
         this.add(btn_editar);
         this.add(btn_borrar);
         this.add(btn_cerrar);
-        this.add(scr_proyectos);
         this.add(lbl_filtro);
         this.add(txt_filtro);
         this.add(btn_filtrar);
+        this.add(scr_proyectos);
+
 
         ControladorTxt ctxt = new ControladorTxt();
 
         txt_codproy.addKeyListener(ctxt);
         txt_proy.addKeyListener(ctxt);
         txt_desc.addKeyListener(ctxt);
-        txt_filtro.addKeyListener(ctxt);
 
         ControladorClick click = new ControladorClick();
 
@@ -367,6 +388,7 @@ public class AppProyecto extends JFrame implements ActionListener {
             stm = cnx.createStatement();
             
             rs = stm.executeQuery("call sp_listar_proyectos();");
+            //rs = stm.executeQuery("{call sp_listar_proyectos()}"); //  para SQL Server
             
             int nc = rs.getMetaData().getColumnCount();
 
@@ -452,6 +474,7 @@ public class AppProyecto extends JFrame implements ActionListener {
             txt_codproy.setText(codproy);
 
             String cad_sql = "call sp_buscar_proyecto(?);";
+            //String cad_sql = "{call sp_buscar_proyecto(?)}"; // Para SQL server
             
             Connection cnx;
 
