@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -34,6 +35,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
@@ -42,7 +44,9 @@ import javax.swing.table.TableColumnModel;
 public class AppProyecto extends JFrame implements ActionListener {
     
     private JLabel lbl_titulo, lbl_1, lbl_2, lbl_3, lbl_4, lbl_5, lbl_6, lbl_7, lbl_8, lbl_filtro;
-    private JTextField txt_codproy, txt_proy, txt_desc, txt_filtro;
+    private JTextField txt_codproy, txt_proy, txt_filtro;
+    
+    private JTextArea txt_desc; 
 
     private JDateChooser dc_fini, dc_ffin;
 
@@ -68,165 +72,160 @@ public class AppProyecto extends JFrame implements ActionListener {
 
     private void IniciarFormulario() {
         this.setTitle("TGH GESTIÓN DE PROYECTOS");
-        this.setSize(430, 570);
+        this.setSize(605, 680);
         this.setLocationRelativeTo(null);
         this.setLayout(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    private void IniciarControles() {
-        lbl_titulo = new JLabel();
-        lbl_titulo.setText("GESTIÓN DE PROYECTOS");
-        lbl_titulo.setFont(new Font("Calibri", Font.BOLD, 24));
-        lbl_titulo.setForeground(new Color(0,255,0));
-        lbl_titulo.setBounds(10, 15, 300, 25);
+private void IniciarControles() {
+    lbl_titulo = new JLabel("GESTIÓN DE PROYECTOS");
+    lbl_titulo.setFont(new Font("Tahoma", Font.BOLD, 22));
+    lbl_titulo.setForeground(new Color(0, 191, 168));
+    lbl_titulo.setBounds(20, 20, 300, 25);
 
-        lbl_1 = new JLabel();
-        lbl_1.setText("Código Proyecto");
-        lbl_1.setBounds(20, 50, 120, 25);
+    lbl_1 = new JLabel("Código Proyecto:");
+    lbl_1.setBounds(20, 60, 120, 25);
 
-        txt_codproy = new JTextField();
-        txt_codproy.setHorizontalAlignment(JTextField.CENTER);
-        txt_codproy.setBounds(150, 50, 80, 25);
+    txt_codproy = new JTextField();
+    txt_codproy.setHorizontalAlignment(JTextField.CENTER);
+    txt_codproy.setBounds(130, 60, 120, 25);
 
-        lbl_2 = new JLabel();
-        lbl_2.setText("Proyecto");
-        lbl_2.setBounds(20, 80, 110, 25);
+    lbl_2 = new JLabel("Proyecto:");
+    lbl_2.setBounds(320, 60, 95, 25);
 
-        txt_proy = new JTextField();
-        txt_proy.setBounds(20, 110, 110, 25);
+    txt_proy = new JTextField();
+    txt_proy.setBounds(390, 60, 180, 25);
+    
 
-        lbl_3 = new JLabel();
-        lbl_3.setText("Descripción");
-        lbl_3.setBounds(150, 80, 110, 25);
+    lbl_3 = new JLabel("Descripción del proyecto:");
+    lbl_3.setBounds(20, 95, 220, 25);
 
-        txt_desc = new JTextField();
-        txt_desc.setBounds(150, 110, 110, 25);
+    txt_desc = new JTextArea();
+    txt_desc.setBounds(20, 120, 260, 50);
+    txt_desc.setLineWrap(true); 
+    txt_desc.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1)); 
 
-        lbl_4 = new JLabel();
-        lbl_4.setText("Fecha Inicio");
-        lbl_4.setBounds(20, 170, 110, 25);
+    lbl_4 = new JLabel("Fecha de inicio:");
+    lbl_4.setBounds(320, 115, 110, 25);
 
-        dc_fini = new JDateChooser();
-        dc_fini.setDateFormatString("dd/MM/yyyy");
-        dc_fini.setBounds(20, 200, 110, 25);
+    dc_fini = new JDateChooser();
+    dc_fini.setDateFormatString("dd/MM/yyyy");
+    dc_fini.setBounds(320, 140, 110, 25);
 
-        lbl_5 = new JLabel();
-        lbl_5.setText("Fecha Fin");
-        lbl_5.setBounds(20, 170, 110, 25);
+    lbl_5 = new JLabel("Fecha de fin:");
+    lbl_5.setBounds(460, 115, 110, 25);
 
-        dc_ffin = new JDateChooser();
-        dc_ffin.setDateFormatString("dd/MM/yyyy");
-        dc_ffin.setBounds(20, 200, 110, 25);
-        
-        lbl_6 = new JLabel();
-        lbl_6.setText("Tipo");
-        lbl_6.setBounds(280, 170, 110, 25);
+    dc_ffin = new JDateChooser();
+    dc_ffin.setDateFormatString("dd/MM/yyyy");
+    dc_ffin.setBounds(460, 140, 110, 25);
 
-        cbo_tipo = new JComboBox();
-        cbo_tipo.setBounds(280, 200, 110, 25);
+    lbl_6 = new JLabel("Tipo de proyecto:");
+    lbl_6.setBounds(20, 190, 110, 25);
 
-        arr_tipo = this.ObtenerTipo();
-        
-        for (String[] tipo: arr_tipo) {
-            cbo_tipo.addItem(tipo[1]);
-        }
+    cbo_tipo = new JComboBox();
+    cbo_tipo.setBounds(130, 190, 150, 25);
+    arr_tipo = this.ObtenerTipo();
+    for (String[] tipo : arr_tipo) {
+        cbo_tipo.addItem(tipo[1]);
+    }
 
-	lbl_7 = new JLabel();
-        lbl_7.setText("Estado");
-        lbl_7.setBounds(280, 170, 110, 25);
+    lbl_7 = new JLabel("Estado:");
+    lbl_7.setBounds(320, 190, 110, 25);
 
-        cbo_estado = new JComboBox();
-        cbo_estado.setBounds(280, 200, 110, 25);
+    cbo_estado = new JComboBox();
+    cbo_estado.setBounds(400, 190, 150, 25);
+    arr_estado = this.ObtenerEstado();
+    for (String[] estado : arr_estado) {
+        cbo_estado.addItem(estado[1]);
+    }
 
-        arr_estado = this.ObtenerEstado();
-        
-        for (String[] estado: arr_estado) {
-            cbo_estado.addItem(estado[1]);
-        }
+    lbl_8 = new JLabel("Responsable:");
+    lbl_8.setBounds(20, 235, 140, 25);
 
-	lbl_8 = new JLabel();
-        lbl_8.setText("Responsable");
-        lbl_8.setBounds(280, 170, 110, 25);
+    cbo_usuario = new JComboBox();
+    cbo_usuario.setBounds(130, 235, 150, 25);
+    arr_usuario = this.ObtenerUsuario();
+    for (String[] usuario : arr_usuario) {
+        cbo_usuario.addItem(usuario[1]);
+    }
 
-        cbo_usuario = new JComboBox();
-        cbo_usuario.setBounds(280, 200, 110, 25);
+    btn_nuevo = new JButton("Nuevo");
+    btn_nuevo.setFont(new Font("Tahoma", Font.BOLD, 12));
+    btn_nuevo.setBackground(new Color(93, 54, 196 ));
+    btn_nuevo.setForeground(Color.WHITE);
+    btn_nuevo.setBounds(42, 285, 100, 30);
+    btn_nuevo.addActionListener(this);
 
-        arr_usuario = this.ObtenerUsuario();
-        
-        for (String[] usuario: arr_usuario) {
-            cbo_usuario.addItem(usuario[1]);
-        }
+    btn_agregar = new JButton("Agregar");
+    btn_agregar.setFont(new Font("Tahoma", Font.BOLD, 12));
+    btn_agregar.setBackground(new Color(54, 196, 108 ));
+    btn_agregar.setForeground(Color.WHITE);
+    btn_agregar.setBounds(177, 285, 100, 30);
+    btn_agregar.addActionListener(this);
 
-        lbl_filtro = new JLabel("Buscar:");
-        lbl_filtro.setBounds(20, 450, 60, 25);
-        
-        txt_filtro = new JTextField();
-        txt_filtro.setBounds(80, 450, 200, 25);
+    btn_editar = new JButton("Editar");
+    btn_editar.setFont(new Font("Tahoma", Font.BOLD, 12));
+    btn_editar.setBackground(new Color(196, 164, 54));
+    btn_editar.setForeground(Color.WHITE);
+    btn_editar.setBounds(312, 285, 100, 30);
+    btn_editar.addActionListener(this);
 
-        btn_nuevo = new JButton();
-        btn_nuevo.setText("Nuevo");
-        btn_nuevo.setBounds(10, 240, 90, 25);
-        btn_nuevo.addActionListener(this);
+    btn_borrar = new JButton("Borrar");
+    btn_borrar.setFont(new Font("Tahoma", Font.BOLD, 12));
+    btn_borrar.setBackground(new Color(196, 54, 54  ));
+    btn_borrar.setForeground(Color.WHITE);
+    btn_borrar.setBounds(447, 285, 100, 30);
+    btn_borrar.addActionListener(this);
 
-        btn_agregar = new JButton();
-        btn_agregar.setText("Agregar");
-        btn_agregar.setBounds(110, 240, 90, 25);
-        btn_agregar.addActionListener(this);
+    btn_cerrar = new JButton("Cerrar");
+    btn_cerrar.setFont(new Font("Tahoma", Font.BOLD, 14));
+    btn_cerrar.setBackground(new Color(0, 191, 168));
+    btn_cerrar.setForeground(Color.WHITE);
+    btn_cerrar.setBounds(450, 590, 120, 30);
+    btn_cerrar.addActionListener(this);
 
-        btn_editar = new JButton();
-        btn_editar.setText("Editar");
-        btn_editar.setBounds(210, 240, 90, 25);
-        btn_editar.addActionListener(this);
+    lbl_filtro = new JLabel("Buscar:");
+    lbl_filtro.setBounds(42, 335, 60, 25);
 
-        btn_borrar = new JButton();
-        btn_borrar.setText("Borrar");
-        btn_borrar.setBounds(310, 240, 90, 25);
-        btn_borrar.addActionListener(this);
+    txt_filtro = new JTextField();
+    txt_filtro.setBounds(112, 335, 240, 25);
 
-        btn_cerrar = new JButton();
-        btn_cerrar.setText("Cerrar");
-        btn_cerrar.setFont(new Font("Consolas", Font.BOLD, 14));
-        btn_cerrar.setBackground(Color.RED);
-        btn_cerrar.setForeground(Color.WHITE);
-        btn_cerrar.setBounds(110, 485, 180, 30);
-        btn_cerrar.addActionListener(this);
-        
+    btn_filtrar = new JButton("Filtrar");
+    btn_filtrar.setBounds(370, 335, 80, 25);
+    btn_filtrar.addActionListener(e -> {
+    String proyecto = txt_filtro.getText().trim();
+    if (!proyecto.isEmpty()) {
+        Filtrar(proyecto);
+    } else {
+        JOptionPane.showMessageDialog(
+            null,
+            "Debe ingresar un valor para filtrar.",
+            "TGH TECHNOLOGY SOLUTION",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+});
 
-        btn_filtrar = new JButton("Filtrar");
-        btn_filtrar.setBounds(290, 450, 80, 24);
-        btn_filtrar.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String proyecto = txt_filtro.getText().trim();
-            if (!proyecto.isEmpty()) {
-                Filtrar(proyecto);
-            } else {
-                JOptionPane.showMessageDialog(null, "Debe ingresar un valor para filtrar.");
-            }
-        }
-        });
-        
-        btn_mostrar_registro = new JButton("Limpiar");
-        btn_mostrar_registro.setBounds(140, 340, 130, 25); 
-        btn_mostrar_registro.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MostrarDatos(); // Recargar todos los datos
-            }
-        });
-        this.add(btn_mostrar_registro);
 
-        
-        
-        tb_proyectos = new JTable();
+    btn_mostrar_registro = new JButton("Limpiar");
+    btn_mostrar_registro.setBounds(468, 335, 80, 25);
+    btn_mostrar_registro.addActionListener(e -> {
+        MostrarDatos();          
+        txt_filtro.setText("");  
+    });
+    this.add(btn_mostrar_registro);
 
-        tb_proyectos.setRowHeight(20);
-        tb_proyectos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
-        scr_proyectos = new JScrollPane(tb_proyectos);
-        scr_proyectos.setBounds(10, 280, 390, 150);
+    tb_proyectos = new JTable();
+    tb_proyectos.setRowHeight(20);
+    tb_proyectos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+    scr_proyectos = new JScrollPane(tb_proyectos);
+    scr_proyectos.setBounds(10, 375, 570, 200);
+
+
 
         this.add(lbl_titulo);
         this.add(lbl_1);
@@ -253,6 +252,7 @@ public class AppProyecto extends JFrame implements ActionListener {
         this.add(lbl_filtro);
         this.add(txt_filtro);
         this.add(btn_filtrar);
+        this.add(btn_mostrar_registro);
         this.add(scr_proyectos);
 
 
@@ -390,9 +390,13 @@ public class AppProyecto extends JFrame implements ActionListener {
             
             int nc = rs.getMetaData().getColumnCount();
 
-            for (int i = 1; i <= nc; i++) {
-                modelo.addColumn(rs.getMetaData().getColumnName(i));
-            }
+            modelo.addColumn("Código");
+            modelo.addColumn("Proyecto");
+            modelo.addColumn("Descripción");
+            modelo.addColumn("Fecha Inicio");
+            modelo.addColumn("Fecha Fin");
+            modelo.addColumn("Responsable");
+
 
             while (rs.next()) {
                 Object[] arr_filas = new Object[nc];
@@ -431,23 +435,44 @@ public class AppProyecto extends JFrame implements ActionListener {
         
         TableColumnModel arr_col = tb_proyectos.getColumnModel();
         
+        if (arr_col.getColumnCount() > 0) {
         arr_col.getColumn(0).setPreferredWidth(50);
         arr_col.getColumn(0).setCellRenderer(alinearCentro);
         
-        arr_col.getColumn(1).setPreferredWidth(120);
+        if (arr_col.getColumnCount() > 1) {
+            arr_col.getColumn(1).setPreferredWidth(120);
+            
+        if (arr_col.getColumnCount() > 2) {
+        arr_col.getColumn(2).setPreferredWidth(120);
+        }
+        }
+    } else {
+        System.out.println("No se han agregado columnas al modelo de tabla.");
+    }
     }
 
     private class ControladorTxt implements KeyListener {
 
-        @Override
-        public void keyTyped(KeyEvent e) {
-            if (e.getSource() == txt_codproy && txt_codproy.getText().length() == 5) {
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+        if (e.getSource() == txt_codproy && txt_codproy.getText().length() == 5) {
+            e.consume();
+        }  
+
+        else if (e.getSource() == txt_proy) {
+            if (txt_proy.getText().length() >= 30) {
                 e.consume();
-            }  else if ((e.getSource() == txt_proy || e.getSource() == txt_desc) && 
-                   ((JTextField) e.getSource()).getText().length() >= 25) {
-            e.consume(); 
+            }
+        } 
+        else if (e.getSource() == txt_desc) {
+            if (txt_desc.getText().length() >= 80) {
+                e.consume();
+            }
         }
     }
+
+
 
         @Override
         public void keyPressed(KeyEvent e) {
@@ -465,77 +490,76 @@ public class AppProyecto extends JFrame implements ActionListener {
         @Override
         public void mouseClicked(MouseEvent e) {
             int registro = tb_proyectos.getSelectedRow();
+            System.out.println("Fila seleccionada: " + registro);  
 
-            txt_codproy.setEditable(false);
+            if (registro != -1) {  
+                txt_codproy.setEditable(false);
 
-            String codproy = (String) tb_proyectos.getValueAt(registro, 0);
-            txt_codproy.setText(codproy);
+                String codproy = (String) tb_proyectos.getValueAt(registro, 0);
+                txt_codproy.setText(codproy);
 
-            String cad_sql = "call sp_buscar_proyecto(?);";
-            //String cad_sql = "{call sp_buscar_proyecto(?)}"; // Para SQL server
-            
-            Connection cnx;
+                String cad_sql = "call sp_buscar_proyecto(?);";
+                Connection cnx;
 
-            try {
-                cnx = cn.Conectar();
+                try {
+                    cnx = cn.Conectar();
 
-                java.sql.PreparedStatement pstm;
+                    java.sql.PreparedStatement pstm;
+                    pstm = cnx.prepareStatement(cad_sql);
+                    pstm.setString(1, codproy);
 
-                pstm = cnx.prepareStatement(cad_sql);
-                pstm.setString(1, codproy);
+                    ResultSet rs = pstm.executeQuery();
 
-                ResultSet rs = pstm.executeQuery();
+                    if (rs.next()) {
+                        System.out.println("Datos encontrados para el código de proyecto: " + codproy);
 
-                if (rs.next()) {
-                    String proy = rs.getString("proyecto");
-                    String des = rs.getString("descripcion"); 
-                    String cod_tip = rs.getString("proyecto_codigo_tipo"); 
-                    String cod_est = rs.getString("proyecto_codigo_estado"); 
-                    String cod_usr = rs.getString("proyecto_codigo_responsable"); 
-                    
-                    
-                    Date fini = rs.getDate("fecha_inicio");
-                    Date ffin = rs.getDate("fecha_fin");
+                        String proy = rs.getString("proyecto");
+                        String des = rs.getString("descripcion"); 
+                        Date fini = rs.getDate("fecha_inicio");
+                        Date ffin = rs.getDate("fecha_fin");
+                        String cod_tip = rs.getString("proyecto_codigo_tipo"); 
+                        String cod_est = rs.getString("proyecto_codigo_estado"); 
+                        String cod_usr = rs.getString("proyecto_codigo_responsable");
 
-                    
-                    txt_proy.setText(proy);
-                    txt_desc.setText(des);
-                    dc_fini.setDate(fini);
-                    dc_ffin.setDate(ffin);
-                    
-                
-                for (int i = 0; i < cbo_tipo.getItemCount(); i++) {
-                    if (arr_tipo.get(i)[0].equals(cod_tip)) {
-                        cbo_tipo.setSelectedIndex(i);
-                        break;
+                        txt_proy.setText(proy);
+                        txt_desc.setText(des);
+                        dc_fini.setDate(fini);
+                        dc_ffin.setDate(ffin);
+
+                        for (int i = 0; i < cbo_tipo.getItemCount(); i++) {
+                            if (arr_tipo.get(i)[0].equals(cod_tip)) {
+                                cbo_tipo.setSelectedIndex(i);
+                                break;
+                            }
+                        } 
+
+                        for (int i = 0; i < cbo_estado.getItemCount(); i++) {
+                            if (arr_estado.get(i)[0].equals(cod_est)) {
+                                cbo_estado.setSelectedIndex(i);
+                                break;
+                            }
+                        } 
+
+                        for (int i = 0; i < cbo_usuario.getItemCount(); i++) {
+                            if (arr_usuario.get(i)[0].equals(cod_usr)) {
+                                cbo_usuario.setSelectedIndex(i);
+                                break;
+                            }
+                        }
+                    } else {
+                        System.out.println("No se encontraron datos para el código de proyecto: " + codproy);
                     }
-                } 
 
-
-		for (int i = 0; i < cbo_estado.getItemCount(); i++) {
-                    if (arr_estado.get(i)[0].equals(cod_est)) {
-                        cbo_estado.setSelectedIndex(i);
-                        break;
-                    }
-                } 
-
-
-		for (int i = 0; i < cbo_usuario.getItemCount(); i++) {
-                    if (arr_usuario.get(i)[0].equals(cod_usr)) {
-                        cbo_usuario.setSelectedIndex(i);
-                        break;
-                    }
-                } 
-
-               
-            }
-            rs.close();
-            pstm.close();
-            cnx.close();
-            } catch (SQLException ex) {
-                
+                    rs.close();
+                    pstm.close();
+                    cnx.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace(); 
+                }
             }
         }
+
+
     }
 
     @Override
@@ -544,72 +568,71 @@ public class AppProyecto extends JFrame implements ActionListener {
         dispose();
         return;
     }
+        if (e.getSource() == btn_nuevo) {
+            LimpiarDatos();
+        } else if (e.getSource() == btn_mostrar_registro) {
+            MostrarDatos();
+        } else {
+            if (e.getSource() != btn_borrar) {
+                if (txt_codproy.getText().trim().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Ingrese código de proyecto.", "TGH TECHNOLOGY SOLUTION", JOptionPane.WARNING_MESSAGE);
+                    txt_codproy.requestFocus();
+                    return;
+                }
+                if (txt_proy.getText().trim().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Ingrese nombre del proyecto.", "TGH TECHNOLOGY SOLUTION", JOptionPane.WARNING_MESSAGE);
+                    txt_proy.requestFocus();
+                    return;
+                }
+                if (txt_desc.getText().trim().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Ingrese descripción del proyecto.", "TGH TECHNOLOGY SOLUTION", JOptionPane.WARNING_MESSAGE);
+                    txt_desc.requestFocus();
+                    return;
+                }
+                if (dc_fini.getDate() == null) {
+                    JOptionPane.showMessageDialog(null, "Seleccione la fecha de inicio del proyecto.", "TGH TECHNOLOGY SOLUTION", JOptionPane.WARNING_MESSAGE);
+                    dc_fini.requestFocus();
+                    return;
+                }
 
-    if (e.getSource() == btn_nuevo) {
-        LimpiarDatos();
-    } else {
+                Date fechaInicio = dc_fini.getDate();
+                Date fechaActual = new Date();
+
+                if (fechaInicio.after(fechaActual)) {
+                    JOptionPane.showMessageDialog(null, "La fecha de inicio no puede ser posterior a la fecha actual.", "TGH TECHNOLOGY SOLUTION", JOptionPane.WARNING_MESSAGE);
+                    dc_fini.requestFocus();
+                    return;
+                }
+
+                if (dc_ffin.getDate() == null) {
+                    JOptionPane.showMessageDialog(null, "Seleccione la fecha de cierre del proyecto.", "TGH TECHNOLOGY SOLUTION", JOptionPane.WARNING_MESSAGE);
+                    dc_ffin.requestFocus();
+                    return;
+                }
+
+                Date fechaFin = dc_ffin.getDate();
+
+                if (fechaFin.before(fechaInicio)) {
+                    JOptionPane.showMessageDialog(null, "La fecha de cierre no puede ser anterior a la fecha de inicio.", "TGH TECHNOLOGY SOLUTION", JOptionPane.WARNING_MESSAGE);
+                    dc_ffin.requestFocus();
+                    return;
+                }
+
+                if (cbo_tipo.getSelectedIndex() == 0) {
+                    JOptionPane.showMessageDialog(null, "Seleccione un tipo de proyecto.", "TGH TECHNOLOGY SOLUTION", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                if (cbo_estado.getSelectedIndex() == 0) {
+                    JOptionPane.showMessageDialog(null, "Seleccione un estado para el proyecto.", "TGH TECHNOLOGY SOLUTION", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                if (cbo_usuario.getSelectedIndex() == 0) {
+                    JOptionPane.showMessageDialog(null, "Seleccione un responsable de proyecto.", "TGH TECHNOLOGY SOLUTION", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+            }
         
-        if (e.getSource() != btn_borrar) {
-            if (txt_codproy.getText().trim().equals("")) {
-                JOptionPane.showMessageDialog(null, "Ingrese código de proyecto.");
-                txt_codproy.requestFocus();
-                return;
-            }
-            if (txt_proy.getText().trim().equals("")) {
-                JOptionPane.showMessageDialog(null, "Ingrese nombre del proyecto.");
-                txt_proy.requestFocus();
-                return;
-            }
-            if (txt_desc.getText().trim().equals("")) {
-                JOptionPane.showMessageDialog(null, "Ingrese descripción del proyecto.");
-                txt_desc.requestFocus();
-                return;
-            }
 
-            if (dc_fini.getDate() == null) {
-                JOptionPane.showMessageDialog(null, "Seleccione la fecha de inicio del proyecto.");
-                dc_fini.requestFocus();
-                return;
-            }
-
-            Date fechaInicio = dc_fini.getDate();
-            Date fechaActual = new Date();
-
-            if (fechaInicio.after(fechaActual)) {
-                JOptionPane.showMessageDialog(null, "La fecha de inicio no puede ser posterior a la fecha actual.");
-                dc_fini.requestFocus();
-                return;
-            }
-
-            if (dc_ffin.getDate() == null) {
-                JOptionPane.showMessageDialog(null, "Seleccione la fecha de cierre del proyecto.");
-                dc_ffin.requestFocus();
-                return;
-            }
-
-            Date fechaFin = dc_ffin.getDate();
-
-            if (fechaFin.before(fechaInicio)) {
-                JOptionPane.showMessageDialog(null, "La fecha de cierre no puede ser anterior a la fecha de inicio.");
-                dc_ffin.requestFocus();
-                return;
-            }
-
-            
-            if (cbo_tipo.getSelectedIndex() == 0) {
-                JOptionPane.showMessageDialog(null, "Seleccione un tipo de proyecto.");
-                return;
-            }
-	    if (cbo_estado.getSelectedIndex() == 0) {
-                JOptionPane.showMessageDialog(null, "Seleccione un estado para el proyecto.");
-                return;
-            }
-	    if (cbo_usuario.getSelectedIndex() == 0) {
-                JOptionPane.showMessageDialog(null, "Seleccione un responsable de proyecto.");
-                return;
-            }
-
-        }
 
         Proyecto proyecto = new Proyecto();
         proyecto.setCodigo_proyecto(txt_codproy.getText());
@@ -688,6 +711,7 @@ public class AppProyecto extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Proyecto registrado con éxito.");
 
             } else if (e.getSource() == btn_editar) {
+                
                 cad_sql = "call sp_editar_proyecto(?,?,?,?,?,?,?,?);";
                 pstm = cnx.prepareStatement(cad_sql);
                 pstm.setString(1, proyecto.getCodigo_proyecto());
@@ -705,7 +729,7 @@ public class AppProyecto extends JFrame implements ActionListener {
             } else if (e.getSource() == btn_borrar) {
                 int opc = JOptionPane.showConfirmDialog(null,
                         "¿Seguro de borrar el registro?",
-                        "TGH TECHNOLOGY SOLUTION", JOptionPane.YES_NO_OPTION);
+                        "TGH TECHNOLOGY SOLUTION", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (opc == JOptionPane.YES_OPTION) {
                     cad_sql = "call sp_borrar_proyecto(?);";
                     pstm = cnx.prepareStatement(cad_sql);
@@ -806,9 +830,15 @@ public class AppProyecto extends JFrame implements ActionListener {
         rs = pstm.executeQuery();
 
         int nc = rs.getMetaData().getColumnCount();
-        for (int i = 1; i <= nc; i++) {
-            modelo.addColumn(rs.getMetaData().getColumnName(i));
-        }
+
+            modelo.addColumn("Código");
+            modelo.addColumn("Proyecto");
+            modelo.addColumn("Descripción");
+            modelo.addColumn("Fecha Inicio");
+            modelo.addColumn("Fecha Fin");
+            modelo.addColumn("Tipo");
+            modelo.addColumn("Estado");
+            modelo.addColumn("Responsable");
 
         while (rs.next()) {
             Object[] arr_filas = new Object[nc];

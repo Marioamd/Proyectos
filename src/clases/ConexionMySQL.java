@@ -16,6 +16,7 @@ public class ConexionMySQL {
             Class.forName(CONTROLADOR);
         } catch (ClassNotFoundException e) {
             System.out.println("Error al cargar el controlador: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
